@@ -2,6 +2,9 @@ package cn.duozhilin.restaurants.bean;
 
 import java.util.List;
 
+import org.mongodb.morphia.annotations.Embedded;
+
+@Embedded
 public class Address {
 	private String building;
 

@@ -3,8 +3,12 @@ package cn.duozhilin.restaurants.bean;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
+@Entity("restaurants")
 public class Restaurant {
+	@Id
 	private ObjectId _id;
 
 	private Address address;
@@ -20,13 +24,10 @@ public class Restaurant {
 	private String restaurant_id;
 
 	public Restaurant() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Restaurant(ObjectId _id, Address address, String borough, String cuisine, List<Grade> grades, String name,
 			String restaurant_id) {
-		super();
 		this._id = _id;
 		this.address = address;
 		this.borough = borough;

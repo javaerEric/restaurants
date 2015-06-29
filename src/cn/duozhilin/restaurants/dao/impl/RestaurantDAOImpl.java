@@ -2,36 +2,85 @@ package cn.duozhilin.restaurants.dao.impl;
 
 import java.util.List;
 
-import org.bson.Document;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.query.Query;
 
+import cn.duozhilin.restaurants.bean.Address;
 import cn.duozhilin.restaurants.bean.Restaurant;
-import cn.duozhilin.restaurants.bean.RestaurantMapper;
 import cn.duozhilin.restaurants.dao.RestaurantDAO;
 
 import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 
 public class RestaurantDAOImpl implements RestaurantDAO {
+	private Datastore datastore;
+	private String BUILDING = "address.building";
+	private String COORD = "address.coord";
+	private String ZIPCODE = "address.zipcode";
+	private String ADDRESS = "address";
 
-	private static final String HOST = "127.0.0.1";
-	private static final int PORT = 27017;
-	private static final String DB_NAME = "test";
-	private static final String COLLECTION_NAME = "restaurants";
+	// @Override
+	// public List<Restaurant> findAll() {
+	// MongoClient client = new MongoClient("127.0.0.1", 27017);
+	// MongoDatabase db = client.getDatabase("test");
+	// MongoCollection<Document> restaurants = db.getCollection("restaurants");
+	//
+	// FindIterable<Document> iterable = restaurants.find().limit(1);
+	// List<Restaurant> list = RestaurantMapper.getList(iterable);
+	// client.close();
+	// return list;
+	// }
 
 	public RestaurantDAOImpl() {
-		// TODO Auto-generated constructor stub
+		Morphia morphia = new Morphia();
+
+		morphia.mapPackage("com.eastcom.beans");
+
+		datastore = morphia.createDatastore(new MongoClient("127.0.0.1", 27017), "test");
+
+		datastore.ensureIndexes();
+
 	}
 
+	@Override
 	public List<Restaurant> findAll() {
-		MongoClient client = new MongoClient(HOST, PORT);
-		MongoDatabase db = client.getDatabase(DB_NAME);
-		MongoCollection<Document> restaurants = db.getCollection(COLLECTION_NAME);
-		FindIterable<Document> iterable = restaurants.find().skip(7621).limit(10000);
-
-		List<Restaurant> list = RestaurantMapper.getList(iterable);
-		client.close();
-		return list;
+		return datastore.find(Restaurant.class).asList();
 	}
+
+	@Override
+	public List<Restaurant> findByBuilding(String building) {
+		return datastore.find(Restaurant.class).filter(BUILDING, building).asList();
+	}
+
+	@Override
+	public List<Restaurant> findByCoord(List<Double> coord) {
+		return datastore.find(Restaurant.class).filter(COORD, coord).asList();
+	}
+
+	@Override
+	public List<Restaurant> findByZipcode(String zipcode) {
+		return datastore.find(Restaurant.class).filter(ZIPCODE, zipcode).asList();
+	}
+
+	@Override
+	public List<Restaurant> findByAddress(Address address) {
+		return datastore.find(Restaurant.class).filter(ADDRESS, address).asList();
+	}
+
+	@Override
+	public void save(Restaurant restaurant) {
+		datastore.save(restaurant);
+	}
+
+	@Override
+	public void delete(Restaurant restaurant) {
+		datastore.delete(restaurant);
+	}
+
+	@Override
+	public void update(Restaurant restaurant, boolean createIfMissing, String condition, Object value) {
+		Query<Restaurant> query = datastore.createQuery(Restaurant.class).filter(condition, value);
+		datastore.updateFirst(query, restaurant, createIfMissing);
+	}
+
 }
