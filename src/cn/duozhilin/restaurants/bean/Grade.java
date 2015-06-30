@@ -14,7 +14,6 @@ public class Grade {
 
 	public Grade() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Grade(Date date, String grade, int score) {
@@ -53,4 +52,37 @@ public class Grade {
 		return "Grade [date=" + date + ", grade=" + grade + ", score=" + score + "]";
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result + ((grade == null) ? 0 : grade.hashCode());
+		result = prime * result + score;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Grade other = (Grade) obj;
+		if (date == null) {
+			if (other.date != null)
+				return false;
+		} else if (!date.equals(other.date))
+			return false;
+		if (grade == null) {
+			if (other.grade != null)
+				return false;
+		} else if (!grade.equals(other.grade))
+			return false;
+		if (score != other.score)
+			return false;
+		return true;
+	}
 }

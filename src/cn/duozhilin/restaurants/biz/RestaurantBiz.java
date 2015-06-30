@@ -1,19 +1,28 @@
-package cn.duozhilin.restaurants.dao;
+package cn.duozhilin.restaurants.biz;
 
 import java.util.List;
 import java.util.Map;
 
+import cn.duozhilin.restaurants.bean.Address;
 import cn.duozhilin.restaurants.bean.Restaurant;
 
-public interface RestaurantDAO {
-	
-	List<Restaurant> findAll();
+public interface RestaurantBiz {
 
+	List<Restaurant> findAll();
+	
 	List<Restaurant> find(int offset, int length);
 
 	List<Restaurant> findByPropertitys(Map<String, Object> propertitys);
 	
 	List<Restaurant> findByPropertitys(Map<String, Object> propertitys, int offset, int length);
+
+	List<Restaurant> findByBuilding(String building);
+
+	List<Restaurant> findByCoord(List<Double> coord);
+
+	List<Restaurant> findByZipcode(String zipcode);
+
+	List<Restaurant> findByAddress(Address address);
 
 	void save(Restaurant restaurant);
 
