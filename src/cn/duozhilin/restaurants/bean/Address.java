@@ -58,8 +58,14 @@ public class Address {
 
 	@Override
 	public String toString() {
-		return "Address [building=" + building + ", coord=" + coord + ", street=" + street + ", zipcode=" + zipcode
-				+ "]";
+		StringBuffer buf = new StringBuffer();
+		buf.append("{");
+		buf.append("building:" + building);
+		buf.append(" , coord:" + coord);
+		buf.append(" , street:" + street);
+		buf.append(" , zipcode:" + zipcode);
+		buf.append("}");
+		return buf.toString();
 	}
 
 	@Override

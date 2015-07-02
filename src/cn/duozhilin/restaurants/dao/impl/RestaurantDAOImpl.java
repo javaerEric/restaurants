@@ -10,16 +10,28 @@ import org.mongodb.morphia.query.Query;
 import cn.duozhilin.restaurants.bean.Restaurant;
 import cn.duozhilin.restaurants.dao.RestaurantDAO;
 
-import com.mongodb.MongoClient;
-
 public class RestaurantDAOImpl implements RestaurantDAO {
 	private Datastore datastore;
 
-	public RestaurantDAOImpl() {
-		Morphia morphia = new Morphia();
-		morphia.mapPackage("cn.duozhilin.restaurants.bean");
-		datastore = morphia.createDatastore(new MongoClient("127.0.0.1", 27017), "test");
-		datastore.ensureIndexes();
+//	public RestaurantDAOImpl() {
+//		Morphia morphia = new Morphia();
+//		morphia.mapPackage("cn.duozhilin.restaurants.bean");
+//		datastore = morphia.createDatastore(new MongoClient("127.0.0.1", 27017), "test");
+//		datastore.ensureIndexes();
+//	}
+	
+	@SuppressWarnings("rawtypes")
+	public RestaurantDAOImpl(Morphia morphia, Datastore datastore, List<Class> classes) {
+		this.datastore = datastore;
+		try {
+			for (Class clazz : classes) {
+				morphia.map(clazz);
+			}
+			datastore.ensureCaps();
+			datastore.ensureIndexes();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

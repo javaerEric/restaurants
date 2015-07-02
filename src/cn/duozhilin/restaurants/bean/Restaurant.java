@@ -6,8 +6,8 @@ import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
-@Entity(value = "restaurants", noClassnameStored=true)
-public class Restaurant {
+@Entity(value = "restaurants", noClassnameStored = true)
+public class Restaurant{
 	@Id
 	private ObjectId _id;
 
@@ -93,8 +93,17 @@ public class Restaurant {
 
 	@Override
 	public String toString() {
-		return "Restaurant [_id=" + _id + ", address=" + address + ", borough=" + borough + ", cuisine=" + cuisine + ", grades=" + grades
-				+ ", name=" + name + ", restaurant_id=" + restaurant_id + "]";
+		StringBuffer buf = new StringBuffer();
+		buf.append("{");
+		buf.append("_id:" + _id);
+		buf.append(" , address:" + address);
+		buf.append(" , borough:" + borough);
+		buf.append(" , cuisine:" + cuisine);
+		buf.append(" , grades:" + grades);
+		buf.append(" , name:" + name);
+		buf.append(" , restaurant_id:" + restaurant_id);
+		buf.append("}");
+		return buf.toString();
 	}
 
 	@Override

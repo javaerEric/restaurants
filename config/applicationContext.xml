@@ -13,33 +13,22 @@
     http://www.springframework.org/schema/task/spring-task-3.0.xsd
     http://www.springframework.org/schema/aop
     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+    <bean id="serviceLocator" class="cn.duozhilin.restaurants.spring.ServiceLocator"/>
  
-    <description>数据源</description>
- 
- 
-    <!-- mongodb配置 -->
-    <bean id="mongoClient" class="com.mongodb.MongoClient">
-        <constructor-arg value="127.0.0.1"/>
-        <constructor-arg value="27017"/>
+ 	<!-- 数据库配置 -->
+    <import resource="classpath:spring-datasource.xml"/>
+    
+    <bean id="restaurantDAO" class="cn.duozhilin.restaurants.dao.impl.RestaurantDAOImpl">
+    	<constructor-arg ref="morphia"/>  
+        <constructor-arg ref="datastore"/>  
+        <constructor-arg>  
+            <list>  
+                <value>cn.duozhilin.restaurants.bean.Restaurant</value>  
+            </list>  
+        </constructor-arg>  
     </bean>
- 
-    <bean id="morphia" class="com.google.code.morphia.Morphia"/>
- 
-    <bean id="restaurantsMongoDatastore" class="cn.duozhilin.restaurants.db.MongoDataStore" init-method="init">
-        <constructor-arg ref="morphia"/>
-        <!-- Mongo连接器 -->
-        <constructor-arg ref="mongoClient"/>
-        <!-- 数据库名 -->
-        <constructor-arg value="test"/>
-<!--         用户名
-        <constructor-arg value="paojiao"/>
-        密码
-        <constructor-arg value="123456"/> -->
- 
-        <property name="entityClasses">
-            <list>
-                <value>cn.duozhilin.restaurants.bean.Restaurant</value>
-            </list>
-        </property>
+    
+    <bean id="restaurantBiz" class="cn.duozhilin.restaurants.biz.impl.RestaurantBizImpl">
+    	<property name="dao" ref="restaurantDAO"></property>
     </bean>
 </beans>

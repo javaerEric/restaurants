@@ -8,7 +8,6 @@ import cn.duozhilin.restaurants.bean.Address;
 import cn.duozhilin.restaurants.bean.Restaurant;
 import cn.duozhilin.restaurants.biz.RestaurantBiz;
 import cn.duozhilin.restaurants.dao.RestaurantDAO;
-import cn.duozhilin.restaurants.dao.impl.RestaurantDAOImpl;
 
 public class RestaurantBizImpl implements RestaurantBiz {
 	private static final String BUILDING = "address.building";
@@ -16,12 +15,6 @@ public class RestaurantBizImpl implements RestaurantBiz {
 	private static final String ZIPCODE = "address.zipcode";
 	private static final String ADDRESS = "address";
 	private RestaurantDAO dao;
-	
-	
-
-	public RestaurantBizImpl() {
-		dao = new RestaurantDAOImpl();
-	}
 
 	@Override
 	public List<Restaurant> findAll() {

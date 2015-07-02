@@ -49,7 +49,13 @@ public class Grade {
 
 	@Override
 	public String toString() {
-		return "Grade [date=" + date + ", grade=" + grade + ", score=" + score + "]";
+		StringBuffer buf = new StringBuffer();
+		buf.append("{");
+		buf.append("date:" + date);
+		buf.append(" , grade:" + grade);
+		buf.append(" , score:" + score);
+		buf.append("}");
+		return buf.toString();
 	}
 
 	@Override

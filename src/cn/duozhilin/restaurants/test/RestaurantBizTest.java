@@ -14,11 +14,12 @@ import java.util.Map;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import cn.duozhilin.restaurants.bean.Address;
 import cn.duozhilin.restaurants.bean.Restaurant;
 import cn.duozhilin.restaurants.biz.RestaurantBiz;
-import cn.duozhilin.restaurants.biz.impl.RestaurantBizImpl;
 
 /**
  * @author dzl
@@ -29,7 +30,9 @@ public class RestaurantBizTest {
 
 	@Before
 	public void before() {
-		biz = new RestaurantBizImpl();
+//		biz = new RestaurantBizImpl();
+		ApplicationContext context = new FileSystemXmlApplicationContext("classpath:applicationContext.xml");
+		biz = (RestaurantBiz) context.getBean("restaurantBiz");
 	}
 
 	@Test

@@ -7,22 +7,33 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import cn.duozhilin.restaurants.bean.Restaurant;
 import cn.duozhilin.restaurants.dao.RestaurantDAO;
-import cn.duozhilin.restaurants.dao.impl.RestaurantDAOImpl;
 
 public class RestaurantDAOTest {
 	private RestaurantDAO dao;
 
 	@Before
 	public void before() {
-		dao = new RestaurantDAOImpl();
+//		biz = new RestaurantBizImpl();
+		ApplicationContext context = new FileSystemXmlApplicationContext("classpath:applicationContext.xml");
+		dao = (RestaurantDAO) context.getBean("restaurantDAO");
 	}
 
 	@Test
 	public void testFindAll() {
 		List<Restaurant> list = dao.findAll();
+		for (Restaurant restaurant : list) {
+			System.out.println(restaurant);
+		}
+	}
+	
+	@Test
+	public void testFind() {
+		List<Restaurant> list = dao.find(0, 10);
 		for (Restaurant restaurant : list) {
 			System.out.println(restaurant);
 		}
