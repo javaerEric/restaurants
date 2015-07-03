@@ -72,13 +72,23 @@ public class RestaurantDAOTest {
 	
 	@Test
 	public void testUpdate() {
-//		Restaurant restaurant = dao.findByZipcode("10065").get(0);
-//		restaurant.setName("update test!");		
-//		dao.update(restaurant, false, "address.zipcode", "10065");
-//		List<Restaurant> list = dao.findByZipcode("10065");
-//		for (Restaurant result : list) {
-//			System.out.println(result);
-//		}
+		List<Restaurant> list = dao.find(6,3);
+		for (Restaurant result : list) {
+			System.out.println(result);
+		}
+		Restaurant restaurant = list.get(0);
+		restaurant.setName("this is test for update.dao4!");	
+		restaurant.set_id(null);
+//		restaurant.setAddress(new Address());
+//		restaurant.setBorough(null);
+		System.out.println("**************");
+		Map<String, Object> condition = new HashMap<String, Object>();
+//		condition.put("address.zipcode", "10065");
+		dao.update(restaurant, false, condition);
+		list = dao.find(0,3);
+		for (Restaurant result : list) {
+			System.out.println(result);
+		}
 	}
 	
 }

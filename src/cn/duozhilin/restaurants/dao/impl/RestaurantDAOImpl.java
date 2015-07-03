@@ -6,6 +6,7 @@ import java.util.Map;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.UpdateOperations;
 
 import cn.duozhilin.restaurants.bean.Restaurant;
 import cn.duozhilin.restaurants.dao.RestaurantDAO;
@@ -47,15 +48,13 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 	
 	@Override
 	public List<Restaurant> findByPropertitys(Map<String, Object> propertitys) {
-		Query<Restaurant> query = datastore.find(Restaurant.class);
-		getQuery(query, propertitys);
+		Query<Restaurant> query = getQuery( propertitys);
 		return query.asList();
 	}
 
 	@Override
 	public List<Restaurant> findByPropertitys(Map<String, Object> propertitys, int offset, int length) {
-		Query<Restaurant> query = datastore.find(Restaurant.class);
-		getQuery(query, propertitys);
+		Query<Restaurant> query = getQuery(propertitys);
 		return query.offset(offset).limit(length).asList();
 	}
 
@@ -63,24 +62,52 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 	public void save(Restaurant restaurant) {
 		datastore.save(restaurant);
 	}
-
+	
+	@Override
+	public void save(Iterable<Restaurant> entities) {
+		datastore.save(entities);
+	}
+	
 	@Override
 	public void delete(Restaurant restaurant) {
 		datastore.delete(restaurant);
 	}
+	
+	@Override
+	public void delete(Map<String, Object> conditions) {
+		Query<Restaurant> query = getQuery(conditions);
+		datastore.delete(query);
+	}
 
 	@Override
 	public void update(Restaurant restaurant, boolean createIfMissing, Map<String, Object> conditions) {
-		Query<Restaurant> query = datastore.createQuery(Restaurant.class);
-		getQuery(query, conditions);
+		Query<Restaurant> query = getQuery(conditions);
 		datastore.updateFirst(query, restaurant, createIfMissing);
 	}
 	
-	private Query<Restaurant> getQuery(Query<Restaurant> query, Map<String, Object> conditions){
+	@Override
+	public void update(UpdateOperations<Restaurant> ops, boolean createIfMissing, Map<String, Object> conditions, boolean isAll) {
+		Query<Restaurant> query = getQuery(conditions);
+		if(isAll){
+			datastore.update(query, ops, createIfMissing);
+		}else{
+			datastore.updateFirst(query, ops, createIfMissing);
+		}
+		
+	}
+	
+	private Query<Restaurant> getQuery(Map<String, Object> conditions){
+		Query<Restaurant> query = datastore.createQuery(Restaurant.class);
 		for (String key : conditions.keySet()) {
 			query.filter(key, conditions.get(key));
 		}
 		return query;
+	}
+	
+	@Override
+	public UpdateOperations<Restaurant> getUpdateOperations(){
+		UpdateOperations<Restaurant> ops =  datastore.createUpdateOperations(Restaurant.class);
+		return ops;
 	}
 
 
@@ -92,4 +119,5 @@ public class RestaurantDAOImpl implements RestaurantDAO {
 	public void setDatastore(Datastore datastore) {
 		this.datastore = datastore;
 	}
+
 }

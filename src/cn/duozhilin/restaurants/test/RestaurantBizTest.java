@@ -101,6 +101,7 @@ public class RestaurantBizTest {
 		address.setZipcode("10065");
 		List<Restaurant> list = biz.findByAddress(address);
 		for (Restaurant restaurant : list) {
+			System.out.println(restaurant);
 			assertTrue(restaurant.getAddress().equals(address));
 		}
 	}
